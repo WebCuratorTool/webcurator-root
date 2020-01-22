@@ -79,7 +79,7 @@ public class HarvestCoordinatorNotifier implements HarvestAgentListener, CheckNo
     }
 
     @Override
-    public void requestRecovery(String haHost, int haPort, String haService) {
+    public void requestRecovery(HarvestAgentStatusDTO harvestAgentStatusDTO) {
         // Placeholder - not used with Heritrix 1x
     }
 

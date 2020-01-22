@@ -103,6 +103,10 @@ public class AgentConfig {
     @Value("${digitalAssetStore.host}")
     private String digitalAssetStoreHost;
 
+    // The host protocol type of the digital asset store.
+    @Value("${digitalAssetStore.scheme}")
+    private String digitalAssetStoreScheme;
+
     // The port that the digital asset store is listening on for http connections.
     @Value("${digitalAssetStore.port}")
     private int digitalAssetStorePort;
@@ -208,11 +212,11 @@ public class AgentConfig {
     @Scope(BeanDefinition.SCOPE_SINGLETON)
     @Lazy(false) // lazy-init="default" and default-lazy-init="false"
     public DigitalAssetStore digitalAssetStore() {
-        DigitalAssetStoreClient bean = new DigitalAssetStoreClient(digitalAssetStoreHost, digitalAssetStorePort,
-                new RestTemplateBuilder());
+        DigitalAssetStoreClient bean = new DigitalAssetStoreClient(digitalAssetStoreScheme, digitalAssetStoreHost, digitalAssetStorePort, new RestTemplateBuilder());
 
         return bean;
     }
+
 
     @Bean
     @Scope(BeanDefinition.SCOPE_SINGLETON)

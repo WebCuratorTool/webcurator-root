@@ -6,6 +6,7 @@ import org.apache.commons.logging.LogFactory;
 import org.webcurator.domain.model.core.harvester.agent.HarvestAgentStatusDTO;
 
 import java.util.List;
+import java.util.Map;
 
 public class MockHarvestAgent implements HarvestAgent {
 
@@ -63,6 +64,11 @@ public class MockHarvestAgent implements HarvestAgent {
 	public void restrictBandwidth(String job, int bandwidthLimit) 
 	{
 		log.debug("restrict bandwidth of "+job+" to "+bandwidthLimit);
+	}
+
+	@Override
+	public void initiateHarvest(String job, Map<String, String> params) {
+		log.debug("initiate harvest - "+job);
 	}
 
 	public void resume(String job) {

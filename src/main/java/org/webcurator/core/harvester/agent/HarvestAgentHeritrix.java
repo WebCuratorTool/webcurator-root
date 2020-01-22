@@ -15,17 +15,6 @@
  */
 package org.webcurator.core.harvester.agent;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.archive.crawler.framework.CrawlScope;
@@ -39,10 +28,16 @@ import org.webcurator.core.harvester.agent.filter.*;
 import org.webcurator.core.harvester.coordinator.HarvestAgentListener;
 import org.webcurator.core.reader.LogProvider;
 import org.webcurator.core.store.DigitalAssetStore;
-import org.webcurator.domain.model.core.ArcHarvestResultDTO;
+import org.webcurator.domain.model.core.HarvestResultDTO;
 import org.webcurator.domain.model.core.LogFilePropertiesDTO;
 import org.webcurator.domain.model.core.harvester.agent.HarvestAgentStatusDTO;
 import org.webcurator.domain.model.core.harvester.agent.HarvesterStatusDTO;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.*;
 
 /**
  * This is an Implementation of the HarvestAgent interface that uses Heritrix as the 
@@ -89,16 +84,19 @@ public class HarvestAgentHeritrix extends AbstractHarvestAgent implements LogPro
         log = LogFactory.getLog(getClass());
     }
 
-    /** @see HarvestAgent#initiateHarvest(String, String, String). */
-    public void initiateHarvest(String aJob, String aProfile, String aSeeds) {  
+    /** @see HarvestAgent#initiateHarvest(String, Map) . */
+    public void initiateHarvest(String aJob, Map<String, String>params) {
         Harvester harvester = null;
-        
+
+        String aProfile=params.get("profile");
+        String aSeeds=params.get("seeds");
+
         if (log.isDebugEnabled()) {
     		log.debug("Initiating harvest for " + aJob + " " + aSeeds);
     	}
         
         try {
-            super.initiateHarvest(aJob, aProfile, aSeeds);
+            super.initiateHarvest(aJob, params);
             
             File profile = createProfile(aJob, aProfile);
             createSeedsFile(profile, aSeeds);
@@ -177,8 +175,8 @@ public class HarvestAgentHeritrix extends AbstractHarvestAgent implements LogPro
         harvester.stop();
     }
     
-    private ArcHarvestResultDTO createIndex(String aJob) throws IOException {
-        ArcHarvestResultDTO ahr = new ArcHarvestResultDTO();
+    private HarvestResultDTO createIndex(String aJob) throws IOException {
+        HarvestResultDTO ahr = new HarvestResultDTO();
         ahr.setCreationDate(new Date());    
     	return ahr;
     }
@@ -251,7 +249,7 @@ public class HarvestAgentHeritrix extends AbstractHarvestAgent implements LogPro
         }
         
         List das = getHarvester(aJob).getHarvestDigitalAssetsDirs();
-        ArcHarvestResultDTO ahr = new ArcHarvestResultDTO();
+        HarvestResultDTO ahr = new HarvestResultDTO();
          
 
         // Make sure that the files are not longer in use.
@@ -318,7 +316,7 @@ public class HarvestAgentHeritrix extends AbstractHarvestAgent implements LogPro
         if (aFailureStep <= FAILED_ON_SEND_RESULT) {
 	        try {            
                 log.debug("Sending harvest result to WCT for job " + aJob);
-                ahr = new ArcHarvestResultDTO();
+                ahr = new HarvestResultDTO();
                 ahr.setCreationDate(new Date());    
 	            ahr.setTargetInstanceOid(new Long(aJob));
 	            ahr.setProvenanceNote(provenanceNote); 

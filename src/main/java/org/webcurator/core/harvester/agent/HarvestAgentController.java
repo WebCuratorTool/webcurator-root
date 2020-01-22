@@ -2,14 +2,11 @@ package org.webcurator.core.harvester.agent;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.webcurator.domain.model.core.harvester.agent.HarvestAgentStatusDTO;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class HarvestAgentController implements HarvestAgent {
@@ -27,9 +24,8 @@ public class HarvestAgentController implements HarvestAgent {
     @Override
     @PostMapping(path = HarvestAgentPaths.INITIATE_HARVEST)
     public void initiateHarvest(@PathVariable(value = "job") String job,
-                                @RequestParam(value = "profile") String profile,
-                                @RequestParam(value = "seeds") String seeds) {
-        harvestAgent.initiateHarvest(job, profile, seeds);
+                                @RequestBody Map<String, String> params) {
+        harvestAgent.initiateHarvest(job, params);
     }
 
     @Override

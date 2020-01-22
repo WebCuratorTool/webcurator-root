@@ -50,7 +50,7 @@ public class HarvesterListener implements NotificationListener {
 		String message = notification.getMessage();
 		log.info("Notification {} recieved from {}", message, handback);
 
-		ApplicationContext context = ApplicationContextFactory.getWebApplicationContext();
+		ApplicationContext context = ApplicationContextFactory.getApplicationContext();
 		HarvestAgent agent = (HarvestAgent) context.getBean(Constants.BEAN_HARVEST_AGENT);
 		// When the agent moves into the running state grab the settings we need at
 		// Job completion as some of these may no longer be available when the job is finished.
