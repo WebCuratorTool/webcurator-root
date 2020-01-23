@@ -53,6 +53,8 @@ public class HarvestAgentHeritrix extends AbstractHarvestAgent implements LogPro
     private String name = "";
     /** the harvester type of the harvest agent. */
     private HarvesterType harvesterType;
+    /** the protocol part of the harvest agent URL. */
+    private String scheme = "";
     /** the host name of the harvest agent. */
     private String host = "";
     /** the harvest agent control port. */
@@ -338,6 +340,7 @@ public class HarvestAgentHeritrix extends AbstractHarvestAgent implements LogPro
     /** @see org.webcurator.core.harvester.agent.HarvestAgent#getStatus(). */
     public HarvestAgentStatusDTO getStatus() {
         HarvestAgentStatusDTO status = new HarvestAgentStatusDTO();
+        status.setScheme(scheme);
         status.setHost(host);
         status.setPort(port);
         status.setService(service);
@@ -501,7 +504,15 @@ public class HarvestAgentHeritrix extends AbstractHarvestAgent implements LogPro
         super.resume(aJob);
         harvestCoordinatorNotifier.heartbeat(getStatus());
     }
-	
+
+    public String getScheme() {
+        return scheme;
+    }
+
+    public void setScheme(String scheme) {
+        this.scheme = scheme;
+    }
+
     /**
      * @param aHost The host to set.
      */
@@ -593,7 +604,7 @@ public class HarvestAgentHeritrix extends AbstractHarvestAgent implements LogPro
     public void setProvenanceNote(String provenanceNote) {
         this.provenanceNote = provenanceNote;
     }
-    
+
     /**
      * Create the profile for the job and return the profile <code>File</code>.
      * @param aJob the name of the job
@@ -740,7 +751,7 @@ public class HarvestAgentHeritrix extends AbstractHarvestAgent implements LogPro
 		return name;
 	}
 
-	/**
+    /**
      * @see org.webcurator.core.harvester.agent.HarvestAgent#updateProfileOverrides(String, String)
      */
 	public void updateProfileOverrides(String aJob, String aProfile) {

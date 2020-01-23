@@ -51,6 +51,10 @@ public class AgentConfig {
     @Value("${harvestAgent.host}")
     private String harvestAgentHost;
 
+    // Agent host name or ip address that the core knows about.
+    @Value("${harvestAgent.scheme}")
+    private String harvestAgentScheme;
+
     // The max number of harvest to be run concurrently on this agent.
     @Value("${harvestAgent.maxHarvests}")
     private int harvestAgentMaxHarvests;
@@ -181,6 +185,7 @@ public class AgentConfig {
         HarvestAgentHeritrix bean = new HarvestAgentHeritrix();
         bean.setBaseHarvestDirectory(harvestAgentBaseHarvestDirectory);
         bean.setHost(harvestAgentHost);
+        bean.setScheme(harvestAgentScheme);
         bean.setMaxHarvests(harvestAgentMaxHarvests);
         bean.setPort(harvestAgentPort);
         bean.setService(harvestAgentService);
